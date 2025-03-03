@@ -110,25 +110,27 @@ void stop(){
   // RCS.InitializeTouchMenu("0800A1KDN");
 DigitalInputPin distanceSensor(FEHIO::P2_1);
 
+void movesensor(int power){
+    moveindef(power);
+    while(distanceSensor.Value()){}
+    stop();
+}
+void movesensorb(int power){
+    moveindef(power);
+    while(!distanceSensor.Value()){}
+    stop();
+}
 
 int main(void)
 {
-    moveindef(25);
-    while(distanceSensor.Value()){}
-    stop();
-    Sleep(0.5);
-    turnright(25);
-    Sleep(0.5);
-    moveindef(25);
-    while(distanceSensor.Value()){}
-    stop();
-    Sleep(0.5);
-    turnleft(25);
-    Sleep(0.5);
-    moveindef(25);
-    while(distanceSensor.Value()){}
-    stop();
-
+    move_forward(25,17.5);
+   
+    if (distanceSensor.Value()){
+        movesensor(25);
+    }
+    if (!distanceSensor.Value()){
+        movesensorb(-25);
+    }
     
 }
 
