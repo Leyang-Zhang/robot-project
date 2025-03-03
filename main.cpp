@@ -5,7 +5,7 @@
 #include <FEHRCS.h>
 
 //left motor is negative!!!!!!
-#define CPI 40.49
+#define CPI 40.50
 
 //Declarations for encoders & motors
 DigitalEncoder right_encoder(FEHIO::P2_0);
