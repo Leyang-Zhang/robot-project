@@ -150,6 +150,30 @@ void Button()
 }
 
 
+void RedButton()
+{
+
+    turnright(20);
+    move_forward(20, 4);
+    turnleft(20);
+    move_forward(20, 6);
+    move_forward(-20, 10);
+    
+}
+
+void BlueButton()
+{
+
+    turnleft(20);
+    move_forward(20, 4);
+    turnright(20);
+    move_forward(20, 6);
+    move_forward(-20, 10);
+    
+}
+
+
+
 int main(void)
 {
     move_forward(25,17.5);
