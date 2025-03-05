@@ -121,6 +121,35 @@ void movesensorb(int power){
     stop();
 }
 
+void Button()
+{
+    touchstart("touch to start");
+    
+    LCD.Clear();
+    while(1){
+    //Red
+    if (CdScell.Value() > 0 && CdScell.Value() < 1.20)
+    {
+        LCD.SetFontColor(RED);
+        LCD.FillRectangle(0,0, 1000, 1000);
+        //move if red
+
+    }
+
+    //Blue
+    if (CdScell.Value() > 1.25 && CdScell.Value() < 2.5)
+    {
+        LCD.SetFontColor(BLUE);
+        LCD.FillRectangle(0,0, 1000, 1000);
+        //move if blue
+
+    }
+    Sleep(1.0);
+    }
+
+}
+
+
 int main(void)
 {
     move_forward(25,17.5);
