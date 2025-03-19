@@ -207,7 +207,24 @@ void mile2()
     
 
 }
+void startUpRamp(){
+    start();
+    //align with wall
+    move_forward(40, 5); //5 in
+    Sleep(0.3);
+    turnright(20, 0);
+    Sleep(0.3);
 
+    // run into wall
+    move_forward(20, 8);
+    //back up from wall
+    move_forward(-15, 4);
+    Sleep(0.3);
+    turnleft(25, -7);
+    //go up ramp
+    move_forward(40,33); //35 in
+    Sleep(0.3);
+}
 int main(void)
 {
   mile2();  
