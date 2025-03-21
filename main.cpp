@@ -18,6 +18,8 @@ DigitalEncoder left_encoder(FEHIO::P0_0);
 FEHMotor right_motor(FEHMotor::Motor1,9.0);
 FEHMotor left_motor(FEHMotor::Motor3,9.0);
 AnalogInputPin cds(FEHIO :: P1_0);
+DigitalInputPin back_rbumper(FEHIO :: P3_0);
+DigitalInputPin back_lbumper(FEHIO :: P0_7);
 
 
 
@@ -26,7 +28,7 @@ void resetcounts(){
     left_encoder.ResetCounts();
 }
 
-void move_forward(int percent, int inches) //using encoders
+void move_forward(int percent, float inches) //using encoders
 {
     int counts = inches*40.49;
     resetcounts();
@@ -89,6 +91,7 @@ void moveindef(int power){
     right_motor.SetPercent(power);
     left_motor.SetPercent(-power);
 }
+
 void stop(){
     right_motor.Stop();
     left_motor.Stop();
@@ -207,8 +210,17 @@ void mile2()
     
 
 }
-void startUpRamp(){
-    start();
+
+/*void backb_bumpers(){ //waits for both back bumpers to be pressed
+    moveindef(-30);
+    while(back_rbumper.Value() && back_lbumper.Value())
+    {
+        //wait
+        
+    }
+        stop();
+*/
+void upramp(int distance){
     //align with wall
     move_forward(40, 5); //5 in
     Sleep(0.3);
@@ -216,19 +228,104 @@ void startUpRamp(){
     Sleep(0.3);
 
     // run into wall
-    move_forward(20, 8);
+    moveindef(20);
+    Sleep(2.0);
     //back up from wall
-    move_forward(-15, 4);
+    move_forward(-15, 5);
     Sleep(0.3);
-    turnleft(25, -7);
+    turnleft(25, -20);
     //go up ramp
-    move_forward(40,33); //35 in
+    move_forward(40,distance); //35 in
     Sleep(0.3);
 }
+
+void rightpivot(int speed, int counts){
+    resetcounts();
+    int counts1 = 260*2 + counts;  //260 DEFAULT
+    right_motor.SetPercent(speed);  //both negative
+    while(right_encoder.Counts() < counts1){}
+    stop();
+}
+
+void leftpivot(int speed, int counts){
+    resetcounts();
+    int counts1 = 260*2 + counts;  //260 DEFAULT
+    left_motor.SetPercent(-speed);  
+    while(left_encoder.Counts() < counts1){}
+    stop();
+}
+
+void openwindow(){
+    
+    stop();
+}
+
+void twerk(){
+    int num = 0;
+    while(1){
+        moveindef(15);
+        Sleep(0.2);
+        moveindef(-15);
+        Sleep(0.2);
+        num += 1;
+        if (num == 50){
+            break;
+        }
+    }
+    stop();
+}
+
+void mile3()
+{
+    
+    start();
+
+    upramp(30);
+
+    //back up into wall to align
+    turnleft(25, -7);
+    Sleep(0.3);
+    moveindef(-33);
+    Sleep(1.0);
+    stop();
+
+    move_forward(20, 13);
+
+    turnleft(20, 0);
+
+    moveindef(20);
+    Sleep(2.3);
+    stop();
+    
+    
+    rightpivot(-20, 0);
+    turnleft(20, -253);
+    move_forward(20, 4);
+    turnright(20, -250);
+    move_forward(30, 4);
+    leftpivot(70, 200);
+    
+    rightpivot(20, -345);
+    moveindef(25);
+    Sleep(1.0);
+    stop();
+    rightpivot(-20, -450);
+    move_forward(-20, 3);
+
+    leftpivot(-40, -450);
+    right_motor.SetPercent(-25);
+    left_motor.SetPercent(30);
+    Sleep(2.2);
+    stop();
+    
+    twerk();
+    
+
+    
+}
+
 int main(void)
 {
-  mile2();  
-    
-    
+    mile3();
 }
 
