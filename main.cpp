@@ -4,7 +4,7 @@
 #include <FEHMotor.h>
 #include <FEHRCS.h>
 #include <FEHServo.h>
-#include <FEHRCS.h>
+
 
 //cds values
 //RED = Value = 0.200
