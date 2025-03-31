@@ -3,6 +3,8 @@
 #include <FEHUtility.h>
 #include <FEHMotor.h>
 #include <FEHRCS.h>
+#include <FEHServo.h>
+#include <FEHRCS.h>
 
 //cds values
 //RED = Value = 0.200
@@ -20,6 +22,7 @@ FEHMotor left_motor(FEHMotor::Motor3,9.0);
 AnalogInputPin cds(FEHIO :: P1_0);
 DigitalInputPin back_rbumper(FEHIO :: P3_0);
 DigitalInputPin back_lbumper(FEHIO :: P0_7);
+FEHServo RobotArm(FEHServo :: Servo0);
 
 
 
@@ -260,7 +263,7 @@ void openwindow(){
     stop();
 }
 
-void twerk(){
+void twerk(int x){
     int num = 0;
     while(1){
         moveindef(15);
@@ -268,7 +271,7 @@ void twerk(){
         moveindef(-15);
         Sleep(0.2);
         num += 1;
-        if (num == 50){
+        if (num == x){
             break;
         }
     }
@@ -318,14 +321,167 @@ void mile3()
     Sleep(2.2);
     stop();
     
-    twerk();
+    twerk(50);
     
 
     
 }
 
+void arm(int degree){
+    if (degree>-60){
+        RobotArm.SetMax(2500);
+        RobotArm.SetMin(500);
+        int x = degree+85;
+        RobotArm.SetDegree(x);
+    }
+    if (degree<=-60){
+        LCD.Clear();
+        LCD.WriteLine("ERROR: Bad arm angle");
+        Sleep(10.0);
+    }
+}
+
+void armslow(int start, int degree){ 
+    RobotArm.SetMax(2500);
+    RobotArm.SetMin(500);    
+    int x = degree+85;
+    int i = start+85;
+    RobotArm.SetDegree(i);
+    if (degree>-60){
+        if (i<x){
+            while(i<x){
+                RobotArm.SetDegree(i);
+                i += 1;
+                Sleep(0.01);
+            }
+        }      
+        if (i>x){
+            while(i>x){
+                RobotArm.SetDegree(i);
+                i -= 1;
+                Sleep(0.02);
+            }
+        }
+    }
+    if (degree<=-60){
+        LCD.Clear();
+        LCD.WriteLine("ERROR: Bad arm angle");
+        Sleep(10.0);
+    }
+}
+
+void getbucket(){
+    arm(90);
+    //starting facing compost bin with back left bumper switch on start button
+    move_forward(30, 7);
+    turnright(25,0);
+    move_forward(30, 11);
+    turnleft(25,0);
+//at tree stump, pick up bucket
+    arm(10);
+    move_forward(20,8);
+}
+
+void dropbucket(){
+    
+    armslow(10, 40);
+    Sleep(0.3);
+    move_forward(-30, 4);
+    turnleft(25,0);
+    move_forward(30,4);
+    turnleft(25,0);
+    moveindef(30);
+    Sleep(3.5);
+    stop();
+    
+    move_forward(-20, 4);
+    turnleft(20, 0);
+    arm(90);
+    moveindef(35);
+    Sleep(7.0);
+    stop();
+    
+    move_forward(-20, 2);
+    armslow(90, 30);
+    move_forward(-20, 4);
+    turnleft(25, 0);
+    moveindef(-25);
+    Sleep(0.5);
+    stop();
+
+    
+}
+
+void fliplever(int lever){
+    //int lever;
+    //lever = RCS.GetLever();
+    
+    //get to space in front of middle lever
+    move_forward(35, 8);
+    turnright(25, -110);
+    arm(60); //arm starts up
+
+    // lever 1, 2, 3
+    LCD.Clear();
+    LCD.WriteLine("Lever: ");
+    LCD.WriteLine(lever);
+    switch (lever) {
+        case 0:
+            //go left
+                turnleft(25,0);
+                move_forward(35, 5);
+                turnright(25, 0);
+                //move forward until at lever
+                move_forward(35, 12);
+                Sleep(1.0);
+                arm(-10); //switches lever down
+                Sleep(1.0);
+                move_forward(-35, 4);
+                arm(-35); //moves arm below lever height
+                move_forward(35, 5); //moves arm under lever
+                arm(30);
+                
+                
+
+            break;
+        case 1:
+            //go middle
+                move_forward(35, 12);
+                Sleep(1.0);
+                arm(-10); //switches lever down
+                Sleep(5.0);
+                move_forward(-35, 4);
+                arm(-35); //moves arm below lever height
+                move_forward(35, 5); //moves arm under lever
+                arm(30);
+            break;
+        case 2:
+            //go right
+            
+                turnright(25,0);
+                move_forward(35, 5);
+                turnleft(25, 0);
+
+                move_forward(35, 12);
+                Sleep(1.0);
+                arm(-10); //switches lever down
+                Sleep(1.0);
+                move_forward(-35, 4);
+                Sleep(5.0);
+                arm(-35); //moves arm below lever height
+                move_forward(35, 5); //moves arm under lever
+                arm(30);
+            break;
+    }
+    //wait 5 seconds and flip back up
+    Sleep(5.0);
+}
+
 int main(void)
 {
-    mile3();
+    //RCS.InitializeTouchMenu("0800A1KDN");
+    
+    
+    
 }
 
