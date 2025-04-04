@@ -22,8 +22,8 @@ FEHMotor left_motor(FEHMotor::Motor3,9.0);
 AnalogInputPin cds(FEHIO :: P1_0);
 DigitalInputPin back_rbumper(FEHIO :: P3_0);
 DigitalInputPin back_lbumper(FEHIO :: P0_7);
-FEHServo RobotArm(FEHServo :: Servo0);
-FEHServo Spinner(FEHServo :: Servo7);
+FEHServo RobotArm(FEHServo :: Servo7);
+FEHServo Spinner(FEHServo :: Servo0);
 
 
 
@@ -549,7 +549,7 @@ void compost(){ //start facing compost bin
         spin(0,0);
 
     //go back to start button
-    move_forward(-30,15);
+    //move_forward(-30,15);
 }
 
 //RCS.InitializeTouchMenu("0800A1KDN");
@@ -578,16 +578,36 @@ void buttonstowindow()
 
 }
 
+write( const char* blah ){
+    LCD.Clear();
+    LCD.WriteLine(blah);
+}
+
 int main(void)
 {
     //RCS.InitializeTouchMenu("0800A1KDN");
+    write("compost")
+    compost();
+    Sleep(2.0);
+    write("compost to stump")
     composttostump();
+    Sleep(2.0);
+    write("get bucket")
     getbucket();
+    Sleep(2.0);
+    write("drop bucket")
     dropbucket();
-    fliplever();
+    Sleep(2.0);
+    write("fliplever")
+    fliplever(1);
+    Sleep(2.0);
+    write("lever to light")
     levertolight();
+    Sleep(2.0);
     mile2();
+    Sleep(2.0);
     buttonstowindow();
+    Sleep(2.0);
     mile3();
 
 }
