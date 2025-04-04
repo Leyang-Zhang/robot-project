@@ -23,6 +23,7 @@ AnalogInputPin cds(FEHIO :: P1_0);
 DigitalInputPin back_rbumper(FEHIO :: P3_0);
 DigitalInputPin back_lbumper(FEHIO :: P0_7);
 FEHServo RobotArm(FEHServo :: Servo0);
+FEHServo Spinner(FEHServo :: Servo7);
 
 
 
@@ -370,6 +371,20 @@ void armslow(int start, int degree){
     }
 }
 
+void spin(int start, int degree){
+    Spinner.SetMin(815);
+    Spinner.SetMax(2205);
+    int i = start;
+    int x = degree;
+    Spinner.SetDegree(i);
+    Sleep(0.5);
+    while(i<x){
+        Spinner.SetDegree(i);
+        i += 1;
+        Sleep(0.01);
+    }
+}
+
 void getbucket(){
     arm(90);
     //starting facing compost bin with back left bumper switch on start button
@@ -477,11 +492,71 @@ void fliplever(int lever){
     Sleep(5.0);
 }
 
-int main(void)
-{
-    //RCS.InitializeTouchMenu("0800A1KDN");
+void compost(){ //start facing compost bin
+    spin(0, 0);
+    //go forward a bit
+    move_forward(35,5);
+    //turn left
+    turnleft(25,0);
+    //run into left wall to straighten
+    moveindef(30);
+    Sleep(1.8);
+    stop();
+    //back up and turn right
+    moveindef(-25);
+    Sleep(0.9);
+    stop();
+    turnright(25,0);
+    //drive wheel into compost bin
+    moveindef(25);
+    Sleep(1.1);
+    stop();
+    Sleep(5.0);
+    //spin wheel 180 degrees
     
-    
-    
+        spin(0, 180);
+        Sleep(0.3);
+        move_forward(-30,1);
+        spin(40, 40);
+        Sleep(0.5);
+        move_forward(30,1);
+
+        spin(40, 180);
+        Sleep(0.3);
+        move_forward(-30,1);
+        spin(40, 40);
+        Sleep(0.5);
+        move_forward(30,1);
+
+        spin(40, 135);
+        Sleep(3.0);
+    //spin back to 0 degrees
+
+        spin(0,0);
+        Sleep(0.5); 
+        move_forward(-35,1);
+        spin(0, 180);
+        Sleep(0.5);
+        move_forward(35,1);
+
+        spin(0,0);
+        Sleep(0.5); 
+        move_forward(-35,1);
+        spin(0, 180);
+        Sleep(0.5);
+        move_forward(35,1);
+
+        spin(0,0);
+
+    //go back to start button
+    move_forward(-30,15);
 }
 
+int main(void)
+{   
+    start();
+    arm(90);
+    compost();
+    
+}
+//RCS.InitializeTouchMenu("0800A1KDN");
