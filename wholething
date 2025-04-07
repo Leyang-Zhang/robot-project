@@ -554,9 +554,9 @@ void composttostump()
 {
     move_forward(-35, 5); //back up
     turnright(25, 0);
-  /*  rightpivot(-25,0);*/
+  /*  rightpivot(-25,0);
     moveindef(-25); //back up into wall
-    Sleep(1.5);
+    Sleep(1.5);*/
     move_forward(35, 15);
     turnleft(35,0);
 }
