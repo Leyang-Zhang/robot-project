@@ -104,14 +104,14 @@ void stop(){
 int checkcolor(){ // 2 if red,1 if blue, 0 if no light
     LCD.Clear();
     while(1){
-        if (cds.Value()<0.8 && cds.Value()>0.38) //blue
+        if (cds.Value()<1.2 && cds.Value()>0.5) //blue
         {
             LCD.SetFontColor(BLUE);
             LCD.FillRectangle(0,0,1000,1000);
             return 1;
             break;
         }
-        if (cds.Value()<0.38) //red
+        if (cds.Value()<0.5) //red
         {
             LCD.SetFontColor(RED);
             LCD.FillRectangle(0,0,1000,1000);
@@ -131,12 +131,14 @@ void RedButton()
 {
 
     turnright(20, 0);
-    move_forward(20, 4);
+    move_forward(20, 2);
     turnleft(20, 0);
-    move_forward(20, 6);
-    move_forward(-20, 4);
-    turnleft(25, 0);
-    move_forward(35, 8); //8 in more right than blue
+    moveindef(20);
+    Sleep(2.0);
+    stop();
+    move_forward(-20, 4.5);
+    turnleft(25, -13);
+    move_forward(35, 6); //8 in more right than blue
    /* moveindef(25);
     Sleep(3);*/
     
@@ -148,8 +150,10 @@ void BlueButton()
     turnleft(20, 0);
     move_forward(20, 4);
     turnright(20, 0);
-    move_forward(20, 6);
-    move_forward(-20, 4);
+    moveindef(20);
+    Sleep(2.0);
+    stop();
+    move_forward(-20, 4.5);
     turnleft(25, 0);
    /* moveindef(25);
     Sleep(3);*/
@@ -292,21 +296,24 @@ void mile3()
 
     moveindef(20);
     Sleep(2.3);
-    stop();*/ //dont need since using buttontowindow
-    
+    stop(); //dont need since using buttontowindow (forward edge in window)
     
     rightpivot(-20, 0);
     turnleft(20, -253);
     move_forward(20, 4);
     turnright(20, -250);
     move_forward(30, 4);
+    */
+   
+    // open window
     leftpivot(70, 200);
+    move_forward(35, 3);
     
     rightpivot(20, -345);
     moveindef(25);
     Sleep(1.0);
     stop();
-    rightpivot(-20, -450);
+    rightpivot(-20, -432);
     move_forward(-20, 3);
 
     leftpivot(-40, -450);
@@ -315,7 +322,6 @@ void mile3()
     Sleep(2.2);
     stop();
     
-    twerk(50);
     
 
     
@@ -387,7 +393,7 @@ void getbucket(){
     turnleft(25,0);*/ //dont need since path to stump in composttostump
 //at tree stump, pick up bucket
     arm(0);
-    move_forward(25,10);
+    move_forward(25,9.5);
 }
 
 void dropbucket(){
@@ -406,12 +412,12 @@ void dropbucket(){
     turnleft(20, -8);
     armslow(35, 90);
     moveindef(35);
-    Sleep(5.5);
+    Sleep(6.5);
     stop();
     
     move_forward(-20, 2);
     armslow(90, 30);
-    move_forward(-20, 4);
+    move_forward(-20, 5);
     turnleft(25, 0);
     while(back_rbumper.Value() || back_lbumper.Value())
    {
@@ -430,7 +436,7 @@ void fliplever(int lever){
     
     //get to space in front of middle lever
     
-    turnright(25, -110);
+    turnright(25, -120);
     arm(60); //arm starts up
 
     // lever 1, 2, 3
@@ -444,7 +450,7 @@ void fliplever(int lever){
                 move_forward(35, 5);
                 turnright(25, 0);
                 //move forward until at lever
-                move_forward(35, 8);
+                move_forward(35, 8.5);
                 Sleep(1.0);
                 arm(-30); //switches lever down
                 Sleep(1.0);
@@ -463,7 +469,7 @@ void fliplever(int lever){
             break;
         case 1:
             //go middle
-                move_forward(35, 12);
+                move_forward(35, 12.5);
                 Sleep(1.0);
                 arm(-30); //switches lever down
                 Sleep(5.0);
@@ -509,44 +515,55 @@ void compost(){ //start facing compost bin
     turnright(25,0);
     
     moveindef(25);//drive wheel into compost bin
-    Sleep(1.1);
+    Sleep(1.5);
     stop();
-    Sleep(5.0);
+    Sleep(1.0);
     
-    
+    //1st cw spin
         spin(0, 180);//spin wheel 180 degrees
         Sleep(0.3);
         move_forward(-30,1);
         spin(40, 40);
         Sleep(0.5);
         move_forward(30,1);
-
+//2nd cw spin
         spin(40, 180);
         Sleep(0.3);
         move_forward(-30,1);
         spin(40, 40);
         Sleep(0.5);
         move_forward(30,1.5);
-
-        spin(40, 135);
-        Sleep(3.0);
+//3rd cw
+        spin(40, 135); //was 135
+        Sleep(1.5);
     
-
+//1st ccw
         spin(0,0);//spin back to 0 degrees
         Sleep(0.5); 
         move_forward(-35,1);
         spin(0, 135);
         Sleep(0.5);
         move_forward(35,1);
-
+//2nd ccw
         spin(0,0);
         Sleep(0.5); 
         move_forward(-35,1);
         spin(0, 135);
         Sleep(0.5);
         move_forward(35,1);
-
         spin(0,0);
+        Sleep(0.5);
+    
+//3st ccw
+
+        move_forward(-35,1);
+        spin(0, 135);
+        Sleep(0.5);
+        move_forward(35,1);
+//
+        
+
+        spin(15,15);
 
     //go back to start button
     //move_forward(-30,15);
@@ -569,6 +586,7 @@ void start()
 }
 
 //RCS.InitializeTouchMenu("0800A1KDN");
+
 void composttostump()
 {
     move_forward(-35, 5); //back up
@@ -589,7 +607,7 @@ void levertolight()
     move_forward(-35,3);
     arm(90);
     turnright(25, -110);
-    move_forward(-35,7); //should now be over light
+    move_forward(-35,6.5); //should now be over light
     turnleft(35,0); //should now be over light and facing buttons
     move_forward(35, 4);
 }
@@ -599,7 +617,26 @@ void buttonstowindow()
     //already facing window
     moveindef(25);
     Sleep(3.0); //run into window and flowers at same time
-    rightpivot(-25, 0);
+   // move_forward(-25, 0.1);
+    rightpivot(-25, -30);
+}
+
+void windowtostop()
+{
+    move_forward(35, 1);
+    turnleft(25, -230);
+    while(back_rbumper.Value() || back_lbumper.Value())
+   {
+    moveindef(-25);
+   }
+
+   move_forward(20, 5.5);
+    turnleft(20, -8);
+    moveindef(35);
+    Sleep(6.5);
+    stop();
+
+    
 }
 
 void write( const char* blah ){
@@ -611,7 +648,7 @@ int main(void)
 {
     //RCS.InitializeTouchMenu("0800A1KDN");
     arm(90);
-    Sleep(0.6);
+   /* Sleep(0.6);
     write("compost");
     compost();
     Sleep(2.0);
@@ -630,11 +667,14 @@ int main(void)
     Sleep(1.0);
     write("lever to light");
     levertolight();
-    Sleep(2.0);
+    Sleep(2.0);*/
     mile2();
     Sleep(2.0);
     buttonstowindow();
     Sleep(2.0);
-   // mile3();
+    mile3();
+    windowtostop();
+    twerk(50);
+
 
 }
