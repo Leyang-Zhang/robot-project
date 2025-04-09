@@ -134,7 +134,11 @@ void RedButton()
     move_forward(20, 4);
     turnleft(20, 0);
     move_forward(20, 6);
-    move_forward(-20, 10);
+    move_forward(-20, 7);
+    turnleft(25, 0);
+    move_forward(35, 8); //8 in more right than blue
+    moveindef(25);
+    Sleep(3);
     
 }
 
@@ -145,7 +149,10 @@ void BlueButton()
     move_forward(20, 4);
     turnright(20, 0);
     move_forward(20, 6);
-    move_forward(-20, 10);
+    move_forward(-20, 7);
+    turnleft(25, 0);
+    moveindef(25);
+    Sleep(3);
     
 }
 
@@ -380,7 +387,7 @@ void getbucket(){
     turnleft(25,0);*/ //dont need since path to stump in composttostump
 //at tree stump, pick up bucket
     arm(0);
-    move_forward(20,8);
+    move_forward(25,10);
 }
 
 void dropbucket(){
@@ -394,21 +401,25 @@ void dropbucket(){
     moveindef(30);
     Sleep(3.5);
     stop();
-    
-    move_forward(-20, 4);
-    turnleft(20, -10);
+    //at wall
+    move_forward(-20, 5.5);
+    turnleft(20, -8);
     armslow(35, 90);
     moveindef(35);
-    Sleep(7.0);
+    Sleep(5.5);
     stop();
     
     move_forward(-20, 2);
     armslow(90, 30);
     move_forward(-20, 4);
     turnleft(25, 0);
+    while(back_rbumper.Value() || back_lbumper.Value())
+   {
     moveindef(-25);
-    Sleep(0.5);
-    stop();
+   }
+   move_forward(35, 8);
+   
+   
 
     
 }
@@ -418,7 +429,7 @@ void fliplever(int lever){
     //lever = RCS.GetLever();
     
     //get to space in front of middle lever
-    move_forward(35, 8);
+    
     turnright(25, -110);
     arm(60); //arm starts up
 
@@ -433,14 +444,19 @@ void fliplever(int lever){
                 move_forward(35, 5);
                 turnright(25, 0);
                 //move forward until at lever
-                move_forward(35, 12);
+                move_forward(35, 8);
                 Sleep(1.0);
-                arm(-10); //switches lever down
+                arm(-30); //switches lever down
                 Sleep(1.0);
                 move_forward(-35, 4);
                 arm(-35); //moves arm below lever height
                 move_forward(35, 5); //moves arm under lever
                 arm(30);
+                Sleep(0.5);
+                arm(-45);
+                Sleep(0.5);
+                move_forward(35,-4);
+
                 
                 
 
@@ -449,12 +465,15 @@ void fliplever(int lever){
             //go middle
                 move_forward(35, 12);
                 Sleep(1.0);
-                arm(-10); //switches lever down
+                arm(-30); //switches lever down
                 Sleep(5.0);
                 move_forward(-35, 4);
                 arm(-35); //moves arm below lever height
                 move_forward(35, 5); //moves arm under lever
                 arm(30);
+                Sleep(1.0);
+                arm(-30);
+                Sleep(0.5);
             break;
         case 2:
             //go right
@@ -475,7 +494,7 @@ void fliplever(int lever){
             break;
     }
     //wait 5 seconds and flip back up
-    Sleep(5.0);
+    //Sleep(5.0);
 }
 
 void compost(){ //start facing compost bin
@@ -516,14 +535,14 @@ void compost(){ //start facing compost bin
         spin(0,0);//spin back to 0 degrees
         Sleep(0.5); 
         move_forward(-35,1);
-        spin(0, 180);
+        spin(0, 135);
         Sleep(0.5);
         move_forward(35,1);
 
         spin(0,0);
         Sleep(0.5); 
         move_forward(-35,1);
-        spin(0, 180);
+        spin(0, 135);
         Sleep(0.5);
         move_forward(35,1);
 
@@ -554,19 +573,25 @@ void composttostump()
 {
     move_forward(-35, 5); //back up
     turnright(25, 0);
-  /*  rightpivot(-25,0);
-    moveindef(-25); //back up into wall
-    Sleep(1.5);*/
-    move_forward(35, 15);
+  /*  rightpivot(-25,0);*/
+   // moveindef(-25); //back up into wall
+   while(back_rbumper.Value() || back_lbumper.Value())
+   {
+    moveindef(-25);
+   }
+    
+    move_forward(35, 13);
     turnleft(35,0);
 }
 
 void levertolight()
 {
-    move_forward(-35, 10);
+    move_forward(-35,3);
+    arm(90);
     turnright(25, -110);
-    move_forward(-35,10); //should now be over light
-    turnleft(35,90); //should now be over light and facing buttons
+    move_forward(-35,7); //should now be over light
+    turnleft(35,0); //should now be over light and facing buttons
+    move_forward(35, 4);
 }
 
 void buttonstowindow()
@@ -592,17 +617,18 @@ int main(void)
     compost();
     Sleep(2.0);
     write("compost to stump");
-    composttostump();
+   composttostump();
     Sleep(2.0);
-    write("get bucket");
+   write("get bucket");
     getbucket();
+  //arm(35);
     Sleep(2.0);
     write("drop bucket");
     dropbucket();
-    Sleep(2.0);
+   // Sleep(2.0);
     write("fliplever");
     fliplever(1);
-    Sleep(2.0);
+    Sleep(1.0);
     write("lever to light");
     levertolight();
     Sleep(2.0);
