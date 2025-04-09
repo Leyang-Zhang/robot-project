@@ -134,11 +134,11 @@ void RedButton()
     move_forward(20, 4);
     turnleft(20, 0);
     move_forward(20, 6);
-    move_forward(-20, 7);
+    move_forward(-20, 4);
     turnleft(25, 0);
     move_forward(35, 8); //8 in more right than blue
-    moveindef(25);
-    Sleep(3);
+   /* moveindef(25);
+    Sleep(3);*/
     
 }
 
@@ -149,10 +149,10 @@ void BlueButton()
     move_forward(20, 4);
     turnright(20, 0);
     move_forward(20, 6);
-    move_forward(-20, 7);
+    move_forward(-20, 4);
     turnleft(25, 0);
-    moveindef(25);
-    Sleep(3);
+   /* moveindef(25);
+    Sleep(3);*/
     
 }
 
@@ -196,13 +196,13 @@ void mile2()
     {
         Sleep(0.5);
         BlueButton();
-        turnleft(20, 0);
+      /*  turnleft(20, 0);
         turnleft(20, 0);
         moveindef(25);
         Sleep(5.0);
         move_forward(-20,5);
         turnright(20, 10);
-        moveindef(40);
+        moveindef(40);*/
     }
     
 
@@ -596,11 +596,10 @@ void levertolight()
 
 void buttonstowindow()
 {
-    move_forward(-35,10);//right after pressing either button, get back in line with light
-    turnleft(35,0);
-    move_forward(35, 15); //should run into window in line with light
-  
-
+    //already facing window
+    moveindef(25);
+    Sleep(3.0); //run into window and flowers at same time
+    rightpivot(-25, 0);
 }
 
 void write( const char* blah ){
@@ -636,6 +635,6 @@ int main(void)
     Sleep(2.0);
     buttonstowindow();
     Sleep(2.0);
-    mile3();
+   // mile3();
 
 }
