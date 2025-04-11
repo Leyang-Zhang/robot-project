@@ -417,7 +417,7 @@ void dropbucket(){
     stop();
     //at wall
     move_forward(-25, 5.5);
-    turnleft(35, -8);
+    turnleft(35, -5);
     armslow(35, 90);
     moveindef(45);
     Sleep(5.0);
